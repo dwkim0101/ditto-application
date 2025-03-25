@@ -1,16 +1,49 @@
-# ditto
+# DITTO - 실시간 부정행위 AI 감지 시스템
 
-A new Flutter project.
+**2024 소프트웨어융합대학 해커톤 대상작** 🏆
 
-## Getting Started
+## 프로젝트 소개
 
-This project is a starting point for a Flutter application.
+DITTO는 온라인 시험 환경에서 부정행위를 실시간으로 감지하는 AI 기반 시스템입니다. 화상 분석 기술을 활용하여 시험 감독을 효율적으로 지원하고, 온라인 시험의 공정성과 신뢰성을 높이는 것을 목표로 합니다.
 
-A few resources to get you started if this is your first Flutter project:
+## 주요 기능
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- **실시간 부정행위 감지**: 머신러닝 기반 알고리즘으로 다양한 부정행위 패턴 식별
+- **화상 모니터링**: 시험 중 응시자의 행동 실시간 분석
+- **알림 시스템**: 의심스러운 행동 발견 시 감독관에게 즉시 알림
+- **기록 및 보고서**: 시험 전체 과정 기록 및 종합 보고서 생성
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 기술 스택
+
+- Flutter 프레임워크 기반 크로스 플랫폼 지원
+- TensorFlow/PyTorch 기반 이미지 분석 및 행동 감지
+- Firebase를 활용한 실시간 데이터베이스 및 사용자 인증
+
+## 설치 및 실행 방법
+
+```bash
+# 레포지토리 클론
+git clone https://github.com/dwkim0101/ditto-application.git
+
+# 디렉토리 이동
+cd ditto-application
+
+# 의존성 설치
+flutter pub get
+
+# 어플리케이션 실행
+flutter run
+```
+
+## 프로젝트 문서
+
+프로젝트에 관한 더 자세한 정보는 [프로젝트 문서(PDF)](./docs/ditto_project_documentation.pdf)를 참조하세요.
+
+## 팀원
+
+- 김도원 - 팀장/백엔드 개발
+- [추가 팀원 정보]
+
+## 라이센스
+
+이 프로젝트는 MIT 라이센스 하에 배포됩니다. 자세한 내용은 [LICENSE](./LICENSE) 파일을 참조하세요.
