@@ -2,6 +2,7 @@ import 'package:ditto/identity_verification_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ExamScreen extends StatelessWidget {
   ExamScreen({super.key, required this.examId});
@@ -13,7 +14,12 @@ class ExamScreen extends StatelessWidget {
     '2': '윤효연',
     '3': '이예람',
   };
-  void submit() {
+  Future<void> saveExamNumber(String examNumber) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('examNumber', examNumber);
+  }
+
+  Future<void> submit() async {
     if (examNumberController.text.isNotEmpty &&
         passwordController.text.isNotEmpty) {
       // 서버 요청 또는 다음 로직 처리
@@ -25,6 +31,9 @@ class ExamScreen extends StatelessWidget {
               passwordController.text == '020415' ||
           examNumberController.text == '3' &&
               passwordController.text == '051217') {
+        // examNumber 저장
+        await saveExamNumber(examNumberController.text);
+
         Get.to(() => IdentityVerificationScreen(
               examNumber: examNumberController.text,
               userName: userData[examNumberController.text]!,

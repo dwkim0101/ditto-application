@@ -48,7 +48,6 @@ class _VideoChatScreenState extends State<VideoChatScreen> {
     _localRenderer = RTCVideoRenderer();
     _initializeSocket();
     _initializeMedia();
-    getExamNumber();
   }
 
   Future<String?> getExamNumber() async {
@@ -109,23 +108,25 @@ class _VideoChatScreenState extends State<VideoChatScreen> {
         Timer.periodic(const Duration(milliseconds: 200), (timer) async {
       if (_localRenderer.videoWidth == 0 || _localRenderer.videoHeight == 0)
         return;
+
       try {
         final frameBytes = await _captureVideoFrame();
         if (frameBytes != null) {
-          // 기존 로그
+          // SharedPreferences에서 examNumber 불러오기
+          final prefs = await SharedPreferences.getInstance();
+          final examNumber = prefs.getString('examNumber') ?? '20010980';
+
           print('Frame captured - Size: ${frameBytes.length} bytes');
           print('Frame data (first 50 bytes): ${frameBytes.take(50).toList()}');
-
-          // 새로운 로그 추가
           print('Preparing to send blob...');
           print('Room: $room');
           print('Timestamp: ${DateTime.now().millisecondsSinceEpoch}');
 
-          // Blob 전송
-          socket
-              .emit('message', {'blob': frameBytes, 'candidateId': '20010980'});
+          socket.emit('message', {
+            'blob': frameBytes,
+            'candidateId': examNumber // examNumber 사용
+          });
 
-          // 전송 완료 로그
           print('Blob sent successfully at: ${DateTime.now()}');
         } else {
           print('Failed to capture frame - null frameBytes');
@@ -156,17 +157,20 @@ class _VideoChatScreenState extends State<VideoChatScreen> {
         chatAreaController.text += "${data['sender']}: ${data['message']}\n";
       });
     });
-    socket.on('terminate', (data) {
+
+    socket.on('terminate', (data) async {
       _captureTimer?.cancel();
       _localStream?.dispose();
       _peerConnection.close();
       _localRenderer.dispose();
       socket.disconnect();
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => const ExamEndScreen()),
-        (route) => false, // 모든 이전 화면 제거
-      );
+      if (mounted) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const ExamEndScreen()),
+          (route) => false,
+        );
+      }
     });
     socket.onDisconnect((_) => print('Disconnected from server'));
 
